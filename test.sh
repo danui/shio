@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source libshio.sh
-#source libshio.sh
+source libshio.sh
 
 function assert_equals { #expected, got
     local t=${FUNCNAME[1]}
@@ -46,10 +46,11 @@ function test003_sendN_recvN {
 
 function __cleanup {
     rm -rf /tmp/libshio-test-*
+    SHIO_uninit
 }
 
 trap __cleanup EXIT
-
+SHIO_init
 for t in $(declare -F | awk '{print $3}'| grep ^test | sort); do
     printf "TESTING $t"
     $t

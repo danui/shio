@@ -7,25 +7,19 @@ if [[ -z $SHIO_LOADED ]]; then
     [ -z $SHIO_WORKSPACE ] && SHIO_WORKSPACE="/tmp/shio-$$"
     [ -z $SHIO_VERBOSE ] && SHIO_VERBOSE=false
 
-    function __shio_init {
+    # Initialize SHIO library
+    function SHIO_init {
 	mkdir -p $SHIO_WORKSPACE
 	mkdir $SHIO_WORKSPACE/tmpfile
 	__shio_last_ts=0
 	__shio_last_seq=0
     }
     
-    function __shio_uninit {
+    # Unintialize
+    function SHIO_uninit {
 	rm -rf $SHIO_WORKSPACE
     }
     
-    function __shio_mktemp_file {
-	mktemp $SHIO_WORKSPACE/tmpfile/file-XXXXXXXX
-    }
-    
-    function __shio_get_ts {
-	date +"%s"
-    }
-
     function SHIO_send_message { # dir, msg
 	local destdir="$1"
 	local msg="$2"
@@ -57,6 +51,11 @@ if [[ -z $SHIO_LOADED ]]; then
 	done
     }
 
-    __shio_init
-    trap __shio_uninit SIGINT SIGTERM EXIT
+    function __shio_mktemp_file {
+	mktemp $SHIO_WORKSPACE/tmpfile/file-XXXXXXXX
+    }
+    
+    function __shio_get_ts {
+	date +"%s"
+    }
 fi
